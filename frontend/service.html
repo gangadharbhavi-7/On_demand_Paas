@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Proxmox VM Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="main">
+        <div class="navbar">
+            <div class="icon">
+                <h2 class="logo">Proxmox VM</h2>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li><a href="index.html">HOME</a></li>
+                    <li><a href="about.html">ABOUT</a></li>
+                    <li><a href="service.html">SERVICE</a></li>
+                    <li><a href="contact.html">CONTACT</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content">
+            <h1>Virtual Machine <br><span>Management</span></h1>
+            
+            <!-- Create VM Form -->
+            <div class="form">
+                <h2>Create New VM</h2>
+                <form id="createVMForm">
+                    <input type="text" id="vmName" placeholder="VM Name" required>
+                    <input type="number" id="vmId" placeholder="VM ID" required>
+                    <input type="number" id="vmMemory" placeholder="Memory (MB)" required>
+                    <input type="number" id="vmCores" placeholder="CPU Cores" required>
+                    <input type="text" id="vmStorage" placeholder="Storage" required>
+                    <input type="text" id="vmIso" placeholder="ISO Path" required>
+                    <input type="text" id="vmNetwork" placeholder="Network Bridge" required>
+                    
+                    <h3>Payment Information</h3>
+                    <input type="text" id="upiId" placeholder="UPI ID" required>
+                    <input type="number" id="amount" placeholder="Amount (INR)" required>
+                    
+                    <button type="submit" class="btnn">Create VM</button>
+                </form>
+            </div>
+
+            <!-- Delete VM Form -->
+            <div class="form" style="margin-top: 20px;">
+                <h2>Delete VM</h2>
+                <form id="deleteVMForm">
+                    <input type="number" id="deleteVMId" placeholder="VM ID to Delete" required>
+                    <input type="text" id="deleteUpiId" placeholder="UPI ID" required>
+                    <input type="number" id="deleteAmount" placeholder="Amount (INR)" required>
+                    <button type="submit" class="btnn">Delete VM</button>
+                </form>
+            </div>
+
+            <!-- VM Status Display -->
+            <div class="form" style="margin-top: 20px;">
+                <h2>VM Status</h2>
+                <div id="vmStatus">
+                    <p>No VM selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
