@@ -3,63 +3,69 @@
 <head>
     <title>Proxmox VM Management</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="main">
         <div class="navbar">
             <div class="icon">
-                <h2 class="logo">Proxmox VM</h2>
+                <h2 class="logo">ProxCloud</h2>
             </div>
             <div class="menu">
                 <ul>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="about.html">ABOUT</a></li>
-                    <li><a href="service.html">SERVICE</a></li>
-                    <li><a href="contact.html">CONTACT</a></li>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="service.html">Services</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="content">
-            <h1>Virtual Machine <br><span>Management</span></h1>
+            <h1>Virtual Machine <br><span>Management Portal</span></h1>
             
-            <!-- Create VM Form -->
-            <div class="form">
-                <h2>Create New VM</h2>
-                <form id="createVMForm">
-                    <input type="text" id="vmName" placeholder="VM Name" required>
-                    <input type="number" id="vmId" placeholder="VM ID" required>
-                    <input type="number" id="vmMemory" placeholder="Memory (MB)" required>
-                    <input type="number" id="vmCores" placeholder="CPU Cores" required>
-                    <input type="text" id="vmStorage" placeholder="Storage" required>
-                    <input type="text" id="vmIso" placeholder="ISO Path" required>
-                    <input type="text" id="vmNetwork" placeholder="Network Bridge" required>
-                    
-                    <h3>Payment Information</h3>
-                    <input type="text" id="upiId" placeholder="UPI ID" required>
-                    <input type="number" id="amount" placeholder="Amount (INR)" required>
-                    
-                    <button type="submit" class="btnn">Create VM</button>
-                </form>
-            </div>
+            <div class="form-container">
+                <!-- Create VM Form -->
+                <div class="form">
+                    <h2>Create New Virtual Machine</h2>
+                    <form id="createVMForm">
+                        <div class="form-group">
+                            <h3>VM Configuration</h3>
+                            <input type="text" id="vmName" placeholder="VM Name (e.g., web-server-01)" required>
+                            <input type="number" id="vmId" placeholder="VM ID (e.g., 100)" required>
+                            <input type="number" id="vmMemory" placeholder="Memory in MB (e.g., 2048)" required>
+                            <input type="number" id="vmCores" placeholder="CPU Cores (e.g., 2)" required>
+                            <input type="text" id="vmStorage" placeholder="Storage (e.g., local-lvm)" required>
+                            <input type="text" id="vmIso" placeholder="ISO Path (e.g., local:iso/ubuntu-22.04.iso)" required>
+                            <input type="text" id="vmNetwork" placeholder="Network Bridge (e.g., vmbr0)" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <h3>Payment Information</h3>
+                            <input type="text" id="upiId" placeholder="UPI ID (e.g., user@upi)" required>
+                            <input type="number" id="amount" placeholder="Amount in INR" required>
+                        </div>
+                        
+                        <button type="submit" class="btnn">Create Virtual Machine</button>
+                    </form>
+                </div>
 
-            <!-- Delete VM Form -->
-            <div class="form" style="margin-top: 20px;">
-                <h2>Delete VM</h2>
-                <form id="deleteVMForm">
-                    <input type="number" id="deleteVMId" placeholder="VM ID to Delete" required>
-                    <input type="text" id="deleteUpiId" placeholder="UPI ID" required>
-                    <input type="number" id="deleteAmount" placeholder="Amount (INR)" required>
-                    <button type="submit" class="btnn">Delete VM</button>
-                </form>
-            </div>
-
-            <!-- VM Status Display -->
-            <div class="form" style="margin-top: 20px;">
-                <h2>VM Status</h2>
-                <div id="vmStatus">
-                    <p>No VM selected</p>
+                <!-- VM Management -->
+                <div class="form">
+                    <h2>VM Management</h2>
+                    <div id="vmStatus">
+                        <p>No active VM selected</p>
+                    </div>
+                    
+                    <!-- Delete VM Form -->
+                    <form id="deleteVMForm">
+                        <h3>Delete Virtual Machine</h3>
+                        <input type="number" id="deleteVMId" placeholder="VM ID to Delete" required>
+                        <input type="text" id="deleteUpiId" placeholder="UPI ID for Payment" required>
+                        <input type="number" id="deleteAmount" placeholder="Amount in INR" required>
+                        <button type="submit" class="btnn">Delete Virtual Machine</button>
+                    </form>
                 </div>
             </div>
         </div>
