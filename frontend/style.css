@@ -625,3 +625,20 @@ body {
         padding: 2rem;
     }
 }
+
+.login-modal h2{
+    color:white;
+    margin-bottom:10px;
+}
+
+.form-group label{
+    color:white;
+}
+
+.btnn {
+    margin-bottom:10px;
+
+}
+.form-footer{
+    color:white;
+}
