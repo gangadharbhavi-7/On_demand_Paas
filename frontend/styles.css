@@ -13,7 +13,8 @@
 }
 
 .service-card {
-    background: #ffffff;
+    background: linear-gradient(145deg, #5bc0be, #6fffe9, #98ded9, #d4f8e8);
+
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -60,6 +61,7 @@
 
 /* Contact Page Styles */
 .contact-content {
+    background:#9F7AEA;
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -70,10 +72,11 @@
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     margin-top: 2rem;
+    background: #9f7aea;
 }
 
 .contact-info {
-    background: #f8f9fa;
+    background:#9f7aea
     padding: 2rem;
     border-radius: 8px;
 }
@@ -88,7 +91,7 @@
 }
 
 .contact-form {
-    background: #ffffff;
+    background: rgb(190, 86, 231);
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
