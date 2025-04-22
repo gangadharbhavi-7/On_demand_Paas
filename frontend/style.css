@@ -995,3 +995,21 @@ body {
         padding: 2rem 1rem;
     }
 }
+
+.vm-form label{
+    color:black;
+}
+
+h1{
+    color:white;
+}
+.contact-info h2{
+    color:white;
+}
+.contact-info p{
+    color:white;
+}
+
+.contact-form h2{
+    color:white;
+}
