@@ -7,6 +7,7 @@
     <title>Anantha Cloud Services</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="main">
@@ -16,9 +17,15 @@
             </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
-                <a href="about.html" >About</a>
+                <a href="about.html">About</a>
                 <a href="services.html">Services</a>
                 <a href="contact.html">Contact</a>
+                <div id="userMenu" style="display: none;">
+                    <div class="user-info">
+                        <span>Loading...</span>
+                        <button onclick="logout()">Logout</button>
+                    </div>
+                </div>
             </div>
         </nav>
 
@@ -28,14 +35,17 @@
                 Our cloud services provide seamless scalability, robust security,
                 and high availability, empowering businesses to drive innovation and efficiency.
             </p>
-            <button class="login-btn" onclick="openLoginModal()" aria-label="Open login form">Login</button>
+            <div class="auth-buttons">
+                <button class="login-btn" onclick="openLoginModal()" aria-label="Open login form">Login</button>
+                <button class="signup-btn" onclick="openSignupModal()" aria-label="Open signup form">Sign Up</button>
+            </div>
         </main>
 
         <!-- Login Modal -->
-        <div class="login-modal" id="loginModal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="login-modal" id="loginModal" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
             <div class="login-form">
                 <button class="close-modal" onclick="closeLoginModal()" aria-label="Close login form">×</button>
-                <h2 id="modalTitle">Welcome Back</h2>
+                <h2 id="loginModalTitle">Welcome Back</h2>
                 <form id="loginForm" novalidate>
                     <div class="form-group">
                         <label for="email">Email Address :</label>
@@ -52,110 +62,59 @@
                     <div class="error-message" id="loginError"></div>
                     <button type="submit" class="btnn">Login</button>
                     <p class="form-footer">
-                        Don't have an account? <a href="#" onclick="showSignup()" role="button">Sign up</a>
+                        Don't have an account? <a href="#" onclick="switchToSignup()" role="button">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Signup Modal -->
+        <div class="signup-modal" id="signupModal" role="dialog" aria-labelledby="signupModalTitle" aria-hidden="true">
+            <div class="signup-form">
+                <button class="close-modal" onclick="closeSignupModal()" aria-label="Close signup form">×</button>
+                <h2 id="signupModalTitle">Create Account</h2>
+                <form id="signupForm" novalidate>
+                    <div class="form-group">
+                        <label for="signupName">Full Name :</label>
+                        <input type="text" id="signupName" name="name" required>
+                        <div class="error-message" id="nameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address :</label>
+                        <input type="email" id="signupEmail" name="email" required 
+                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                        <div class="error-message" id="signupEmailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password :</label>
+                        <input type="password" id="signupPassword" name="password" required 
+                               minlength="8">
+                        <div class="error-message" id="signupPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password :</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Company (Optional) :</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                        <div class="error-message" id="termsError"></div>
+                    </div>
+                    <div class="error-message" id="signupError"></div>
+                    <button type="submit" class="btnn">Create Account</button>
+                    <p class="form-footer">
+                        Already have an account? <a href="#" onclick="switchToLogin()" role="button">Login</a>
                     </p>
                 </form>
             </div>
         </div>
     </div>
 
-    <script>
-        const loginModal = document.getElementById('loginModal');
-        const loginForm = document.getElementById('loginForm');
-        
-        function openLoginModal() {
-            loginModal.classList.add('active');
-            loginModal.setAttribute('aria-hidden', 'false');
-        }
-
-        function closeLoginModal() {
-            loginModal.classList.remove('active');
-            loginModal.setAttribute('aria-hidden', 'true');
-            // Clear form and errors when closing
-            loginForm.reset();
-            clearErrors();
-        }
-
-        function clearErrors() {
-            document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
-        }
-
-        // Close modal when clicking outside
-        loginModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeLoginModal();
-            }
-        });
-
-        // Handle escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && loginModal.classList.contains('active')) {
-                closeLoginModal();
-            }
-        });
-
-        // Form validation and submission
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            clearErrors();
-
-            const email = document.getElementById('email');
-            const password = document.getElementById('password');
-            let isValid = true;
-
-            // Email validation
-            if (!email.validity.valid) {
-                const emailError = document.getElementById('emailError');
-                if (email.validity.valueMissing) {
-                    emailError.textContent = 'Email is required';
-                } else if (email.validity.patternMismatch) {
-                    emailError.textContent = 'Please enter a valid email address';
-                }
-                isValid = false;
-            }
-
-            // Password validation
-            if (!password.validity.valid) {
-                const passwordError = document.getElementById('passwordError');
-                if (password.validity.valueMissing) {
-                    passwordError.textContent = 'Password is required';
-                } else if (password.validity.tooShort) {
-                    passwordError.textContent = 'Password must be at least 8 characters long';
-                }
-                isValid = false;
-            }
-
-            if (isValid) {
-                try {
-                    // Add your login API call here
-                    const response = await login(email.value, password.value);
-                    // Handle successful login
-                    window.location.href = '/dashboard'; // Redirect to dashboard
-                } catch (error) {
-                    document.getElementById('loginError').textContent = 
-                        'Login failed. Please check your credentials and try again.';
-                }
-            }
-        });
-
-        async function login(email, password) {
-            // Implement your login API call here
-            // Example:
-            // const response = await fetch('/api/login', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //         'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-            //     },
-            //     body: JSON.stringify({ email, password })
-            // });
-            // return response.json();
-        }
-
-        function showSignup() {
-            // Implement signup logic or navigation
-            window.location.href = '/signup';
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
