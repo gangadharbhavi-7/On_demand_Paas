@@ -1,86 +1,71 @@
-# Proxmox VM Management API
+# Anantha Cloud Services - VM Management Platform
 
-This is a FastAPI-based backend application that allows you to create and manage virtual machines on a Proxmox server.
+A Platform-as-a-Service (PaaS) solution for managing virtual machines with integrated payment processing.
 
-## Setup
+## Features
 
-1. Install the required dependencies:
+- VM Creation and Management
+- UPI Payment Integration
+- Real-time VM Status Monitoring
+- User-friendly Web Interface
+
+## Local Development
+
+1. Clone the repository:
+```bash
+git clone https://github.com/your-username/On_demand_Paas.git
+cd On_demand_Paas
+```
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Configure the environment variables in `.env`:
-- PROXMOX_HOST: Your Proxmox server hostname or IP
-- PROXMOX_USER: Proxmox username (default: root@pam)
-- PROXMOX_PASSWORD: Proxmox password
-- PROXMOX_VERIFY_SSL: Set to False if using self-signed certificates
+3. Set up environment variables:
+Create a `.env` file with:
+```
+PROXMOX_HOST=your_proxmox_host
+PROXMOX_USER=your_proxmox_user
+PROXMOX_PASSWORD=your_proxmox_password
+PROXMOX_VERIFY_SSL=false
+```
 
-## Running the Application
-
-Start the server:
+4. Run the development server:
 ```bash
 python main.py
 ```
 
-The API will be available at `http://localhost:8000`
+5. Access the application:
+- Frontend: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+
+## Deployment
+
+This project is configured for deployment on Vercel:
+
+1. Push your code to GitHub
+2. Import the repository in Vercel
+3. Set up environment variables in Vercel dashboard
+4. Deploy!
 
 ## API Endpoints
 
-### Create VM
-- **POST** `/create-vm`
-- Request body example:
-```json
-{
-    "name": "my-vm",
-    "vmid": 100,
-    "memory": 2048,
-    "cores": 2,
-    "storage": "local-lvm",
-    "iso": "local:iso/ubuntu-22.04.iso",
-    "network": "vmbr0",
-    "payment_info": {
-        "upi_id": "user@upi",
-        "amount": 1000.00,
-        "currency": "INR",
-        "payment_method": "UPI"
-    }
-}
-```
+- `POST /api/create-vm` - Create a new VM
+- `GET /api/vm-status/{vmid}` - Check VM status
+- `DELETE /api/delete-vm/{vmid}` - Delete a VM
+- `GET /api/vm-list` - List all VMs
+- `GET /api/health` - Check service health
 
-### Get VM Status
-- **GET** `/vm-status/{vmid}`
-- Returns the current status of the specified VM
+## Contributing
 
-### Delete VM
-- **DELETE** `/delete-vm/{vmid}`
-- Request body example:
-```json
-{
-    "upi_id": "user@upi",
-    "amount": 500.00,
-    "currency": "INR",
-    "payment_method": "UPI"
-}
-```
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
-## Documentation
+## License
 
-Once the server is running, you can access the interactive API documentation at:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-## Payment Processing
-
-The API uses UPI (Unified Payments Interface) for payment processing. The payment information includes:
-- UPI ID (e.g., "user@upi")
-- Amount
-- Currency (defaults to INR)
-- Payment method (UPI, UPI_QR, or UPI_INTENT)
-
-Note: This is a demonstration implementation. In a production environment, you should:
-1. Use HTTPS for all API calls
-2. Integrate with a proper UPI payment gateway
-3. Implement proper authentication and authorization
-4. Add rate limiting and other security measures
-5. Store payment information securely
-6. Implement proper error handling for failed UPI transactions 
+MIT License 

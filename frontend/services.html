@@ -3,79 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Anantha Cloud Services - Our comprehensive cloud solutions and services">
     <title>Services - Anantha Cloud Services</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="main">
-        <nav class="navbar">
-            <div class="nav-brand">
-                <a href="index.html">Anantha Cloud Services</a>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">Anantha Cloud Services</a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="services.html" class="active">Services</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </nav>
+
+    <main class="services-container">
+        <h1>Create Your Virtual Machine</h1>
+        
+        <form id="vmCreationForm" class="vm-form">
+            <div class="form-group">
+                <label for="vmName">VM Name:</label>
+                <input type="text" id="vmName" name="vmName" required>
             </div>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="about.html">About</a>
-                <a href="services.html" class="active">Services</a>
-                <a href="contact.html">Contact</a>
+
+            <div class="form-group">
+                <label for="vmId">VM ID:</label>
+                <input type="number" id="vmId" name="vmId" required min="100">
             </div>
-        </nav>
 
-        <main class="services-content">
-            <h1>Our Services</h1>
-            
-            <div class="services-grid">
-                <div class="service-card">
-                    <h2>Cloud Infrastructure</h2>
-                    <p>Scalable and reliable infrastructure solutions including:</p>
-                    <ul>
-                        <li>Virtual Machines</li>
-                        <li>Container Orchestration</li>
-                        <li>Auto-scaling Solutions</li>
-                        <li>Load Balancing</li>
-                    </ul>
-                    <a href="#" class="learn-more">Learn More</a>
+            <div class="form-group">
+                <label for="memory">Memory (MB):</label>
+                <input type="number" id="memory" name="memory" required min="512" step="512" value="2048">
+            </div>
+
+            <div class="form-group">
+                <label for="cores">CPU Cores:</label>
+                <input type="number" id="cores" name="cores" required min="1" max="4" value="2">
+            </div>
+
+            <div class="form-group">
+                <label for="storage">Storage:</label>
+                <select id="storage" name="storage" required>
+                    <option value="local-lvm">Local LVM</option>
+                    <option value="local">Local</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="iso">ISO Image:</label>
+                <select id="iso" name="iso" required>
+                    <option value="local:iso/ubuntu-22.04.iso">Ubuntu 22.04</option>
+                    <option value="local:iso/debian-11.iso">Debian 11</option>
+                    <option value="local:iso/centos-8.iso">CentOS 8</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="network">Network Bridge:</label>
+                <input type="text" id="network" name="network" value="vmbr0" required>
+            </div>
+
+            <div class="payment-section">
+                <h2>Payment Information</h2>
+                
+                <div class="form-group">
+                    <label for="upiId">UPI ID:</label>
+                    <input type="text" id="upiId" name="upiId" required 
+                           pattern="[a-zA-Z0-9\.\-_]{2,256}@[a-zA-Z]{2,64}">
                 </div>
 
-                <div class="service-card">
-                    <h2>Data Management</h2>
-                    <p>Comprehensive data solutions for your business:</p>
-                    <ul>
-                        <li>Database Management</li>
-                        <li>Data Warehousing</li>
-                        <li>Backup Solutions</li>
-                        <li>Data Analytics</li>
-                    </ul>
-                    <a href="#" class="learn-more">Learn More</a>
-                </div>
-
-                <div class="service-card">
-                    <h2>Security Services</h2>
-                    <p>Enterprise-grade security measures:</p>
-                    <ul>
-                        <li>Firewall Protection</li>
-                        <li>DDoS Mitigation</li>
-                        <li>Encryption Services</li>
-                        <li>Security Monitoring</li>
-                    </ul>
-                    <a href="#" class="learn-more">Learn More</a>
-                </div>
-
-                <div class="service-card">
-                    <h2>DevOps Solutions</h2>
-                    <p>Streamline your development pipeline:</p>
-                    <ul>
-                        <li>CI/CD Pipeline</li>
-                        <li>Infrastructure as Code</li>
-                        <li>Monitoring & Logging</li>
-                        <li>Automated Testing</li>
-                    </ul>
-                    <a href="#" class="learn-more">Learn More</a>
+                <div class="form-group">
+                    <label for="amount">Amount (INR):</label>
+                    <input type="number" id="amount" name="amount" required min="0" step="0.01">
                 </div>
             </div>
-        </main>
-    </div>
+
+            <button type="submit" class="submit-btn">Create VM</button>
+        </form>
+
+        <div id="vmList" class="vm-list">
+            <h2>Your Virtual Machines</h2>
+            <div class="vm-grid" id="vmGrid">
+                <!-- VMs will be dynamically added here -->
+            </div>
+        </div>
+    </main>
+
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
