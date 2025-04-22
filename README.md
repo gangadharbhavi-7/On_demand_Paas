@@ -1,71 +1,88 @@
-# Anantha Cloud Services - VM Management Platform
+# On-Demand PaaS Application
 
-A Platform-as-a-Service (PaaS) solution for managing virtual machines with integrated payment processing.
+A Platform-as-a-Service application built with FastAPI and Vercel.
 
 ## Features
 
-- VM Creation and Management
-- UPI Payment Integration
-- Real-time VM Status Monitoring
-- User-friendly Web Interface
+- User Authentication (Signup/Login)
+- Service Management
+- VM Management
+- Responsive UI
 
-## Local Development
+## Deployment Instructions
 
-1. Clone the repository:
-```bash
-git clone https://github.com/your-username/On_demand_Paas.git
-cd On_demand_Paas
+### Prerequisites
+
+- Vercel account
+- Git installed locally
+
+### Steps to Deploy
+
+1. Clone this repository:
+   ```bash
+   git clone <your-repository-url>
+   cd On_demand_Paas
+   ```
+
+2. Install Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+
+3. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+
+4. Deploy the application:
+   ```bash
+   vercel
+   ```
+
+5. Follow the prompts to complete the deployment.
+
+### Environment Variables
+
+The following environment variables should be set in your Vercel project settings:
+
+- `SECRET_KEY`: A secure random string for JWT token generation
+- `DATABASE_URL`: SQLite database URL (for local development)
+
+## Project Structure
+
 ```
+On_demand_Paas/
+├── frontend/
+│   ├── index.html
+│   ├── services.html
+│   ├── style.css
+│   └── script.js
+├── main.py
+├── requirements.txt
+├── vercel.json
+└── README.md
+```
+
+## Development
+
+To run the application locally:
+
+1. Create a virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
 2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-3. Set up environment variables:
-Create a `.env` file with:
-```
-PROXMOX_HOST=your_proxmox_host
-PROXMOX_USER=your_proxmox_user
-PROXMOX_PASSWORD=your_proxmox_password
-PROXMOX_VERIFY_SSL=false
-```
-
-4. Run the development server:
-```bash
-python main.py
-```
-
-5. Access the application:
-- Frontend: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
-
-## Deployment
-
-This project is configured for deployment on Vercel:
-
-1. Push your code to GitHub
-2. Import the repository in Vercel
-3. Set up environment variables in Vercel dashboard
-4. Deploy!
-
-## API Endpoints
-
-- `POST /api/create-vm` - Create a new VM
-- `GET /api/vm-status/{vmid}` - Check VM status
-- `DELETE /api/delete-vm/{vmid}` - Delete a VM
-- `GET /api/vm-list` - List all VMs
-- `GET /api/health` - Check service health
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+3. Run the application:
+   ```bash
+   uvicorn main:app --reload
+   ```
 
 ## License
 
-MIT License 
+MIT 
