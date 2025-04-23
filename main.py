@@ -3,11 +3,29 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 import os
+import socket
 from pathlib import Path
+from fastapi import status
 
-app = FastAPI()
+# Load environment variables
+PORT = int(os.getenv("PORT", "8001"))
+HOST = os.getenv("HOST", "0.0.0.0")
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
+def is_port_in_use(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex((HOST, port)) == 0
+
+def find_available_port(start_port):
+    port = start_port
+    while is_port_in_use(port):
+        port += 1
+    return port
+
+app = FastAPI(debug=DEBUG)
 
 # Enable CORS
 app.add_middleware(
@@ -19,9 +37,15 @@ app.add_middleware(
 )
 
 # Mount static files
+static_dir = Path("frontend")
+if not static_dir.exists():
+    static_dir.mkdir(parents=True)
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # Templates
+templates_dir = Path("frontend")
+if not templates_dir.exists():
+    templates_dir.mkdir(parents=True)
 templates = Jinja2Templates(directory="frontend")
 
 # Models
@@ -51,14 +75,40 @@ class ServiceDelete(BaseModel):
     service_id: int
     payment_info: PaymentInfo
 
+class ContactForm(BaseModel):
+    name: str
+    email: EmailStr
+    subject: str
+    message: str
+
 # Routes
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    try:
+        return templates.TemplateResponse("index.html", {"request": request})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading index page: {str(e)}")
 
 @app.get("/services", response_class=HTMLResponse)
 async def read_services(request: Request):
-    return templates.TemplateResponse("services.html", {"request": request})
+    try:
+        return templates.TemplateResponse("services.html", {"request": request})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading services page: {str(e)}")
+
+@app.get("/contact", response_class=HTMLResponse)
+async def read_contact(request: Request):
+    try:
+        return templates.TemplateResponse("contact.html", {"request": request})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading contact page: {str(e)}")
+
+@app.get("/about", response_class=HTMLResponse)
+async def read_about(request: Request):
+    try:
+        return templates.TemplateResponse("about.html", {"request": request})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error loading about page: {str(e)}")
 
 @app.post("/api/create-vm")
 async def create_vm(vm_config: VMConfig):
@@ -121,7 +171,12 @@ async def delete_vm(vmid: int, payment_info: PaymentInfo):
 
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "message": "Service is running normally"}
+    return {
+        "status": "healthy",
+        "message": "Service is running normally",
+        "environment": ENVIRONMENT,
+        "debug": DEBUG
+    }
 
 @app.get("/api/vm-list")
 async def get_vm_list():
@@ -170,7 +225,42 @@ async def delete_service(service_id: int, service_delete: ServiceDelete):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/contact")
+async def submit_contact_form(contact_form: ContactForm):
+    """
+    Handle contact form submissions.
+    In a production environment, this would typically:
+    1. Save the message to a database
+    2. Send an email notification
+    3. Set up an auto-responder
+    """
+    try:
+        # For now, we'll just validate and return success
+        # In production, implement email sending and database storage
+        return {
+            "status": "success",
+            "message": "Thank you for your message! We will get back to you soon."
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to process contact form submission"
+        )
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    try:
+        # Check if the port is available
+        if is_port_in_use(PORT):
+            print(f"Port {PORT} is in use. Trying to find an available port...")
+            PORT = find_available_port(PORT)
+            print(f"Found available port: {PORT}")
+
+        print(f"Starting server in {ENVIRONMENT} mode")
+        print(f"Debug mode: {DEBUG}")
+        print(f"Server will run on {HOST}:{PORT}")
+        uvicorn.run(app, host=HOST, port=PORT)
+    except Exception as e:
+        print(f"Error starting server: {str(e)}")
+        print("Please check if another process is using the port or if you have the necessary permissions.")
 

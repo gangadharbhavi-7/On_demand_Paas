@@ -138,16 +138,13 @@ let currentUser = null;
 // Update UI based on authentication state
 function updateAuthUI() {
     const loginBtn = document.querySelector('.login-btn');
-    const signupBtn = document.querySelector('.signup-btn');
     const userMenu = document.getElementById('userMenu');
     
     if (authToken) {
         if (loginBtn) loginBtn.style.display = 'none';
-        if (signupBtn) signupBtn.style.display = 'none';
         if (userMenu) userMenu.style.display = 'block';
     } else {
         if (loginBtn) loginBtn.style.display = 'block';
-        if (signupBtn) signupBtn.style.display = 'block';
         if (userMenu) userMenu.style.display = 'none';
     }
 }
@@ -228,13 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteServiceForm.addEventListener('submit', handleServiceDeletion);
     }
 
-    const signupForm = document.getElementById('signupForm');
     const loginForm = document.getElementById('loginForm');
-
-    if (signupForm) {
-        signupForm.addEventListener('submit', handleSignup);
-    }
-
     if (loginForm) {
         loginForm.addEventListener('submit', handleLogin);
     }
@@ -296,26 +287,52 @@ async function handleVMDeletion(event) {
 
 async function handleContactSubmission(event) {
     event.preventDefault();
+
     const form = event.target;
-    
-    // Basic form validation
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
-    const message = form.message.value.trim();
+    const name = form.querySelector('#name').value.trim();
+    const email = form.querySelector('#email').value.trim();
+    const subject = form.querySelector('#subject').value.trim();
+    const message = form.querySelector('#message').value.trim();
 
-    if (!name || !email || !message) {
-        showNotification('Error', 'Please fill in all required fields');
+    // Validate required fields
+    if (!name || !email || !subject || !message) {
+        showNotification('Please fill in all required fields.', 'error');
         return;
     }
 
-    // Email validation
-    if (!isValidEmail(email)) {
-        showNotification('Error', 'Please enter a valid email address');
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showNotification('Please enter a valid email address.', 'error');
         return;
     }
 
-    showNotification('Success', 'Message sent successfully!');
-    form.reset();
+    try {
+        const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                subject,
+                message
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            showNotification(data.message, 'success');
+            form.reset(); // Clear the form on success
+        } else {
+            showNotification(data.detail || 'Failed to send message. Please try again.', 'error');
+        }
+    } catch (error) {
+        console.error('Error submitting contact form:', error);
+        showNotification('An error occurred while sending your message. Please try again.', 'error');
+    }
 }
 
 async function handleServiceUpdate(event) {
@@ -356,57 +373,6 @@ async function handleServiceDeletion(event) {
         updateServiceList();
     } catch (error) {
         console.error('Error deleting service:', error);
-    }
-}
-
-async function handleSignup(event) {
-    event.preventDefault();
-    
-    const name = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const company = document.getElementById('company').value;
-    const terms = document.getElementById('terms').checked;
-
-    // Validate form
-    if (!name || !email || !password || !confirmPassword || !terms) {
-        showNotification('Please fill in all required fields', 'error');
-        return;
-    }
-
-    if (password !== confirmPassword) {
-        showNotification('Passwords do not match', 'error');
-        return;
-    }
-
-    try {
-        const response = await fetch('/api/signup', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name,
-                email,
-                password,
-                company
-            })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            storeAuthToken(data.access_token);
-            showNotification('Account created successfully!', 'success');
-            closeSignupModal();
-            await fetchCurrentUser();
-        } else {
-            showNotification(data.detail || 'Signup failed', 'error');
-        }
-    } catch (error) {
-        showNotification('An error occurred during signup', 'error');
-        console.error('Signup error:', error);
     }
 }
 

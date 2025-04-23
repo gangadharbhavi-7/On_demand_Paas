@@ -872,146 +872,145 @@ body {
 }
 
 /* Contact Page Styles */
-.contact-content {
-    padding: 4rem 2rem;
+.contact-container {
     max-width: 1200px;
-    margin: 0 auto;
-    background: var(--darker);
-    min-height: calc(100vh - 75px);
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
 
-.contact-container {
+.contact-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contact-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.contact-header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    margin-top: 2rem;
-    background: rgba(31, 26, 46, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 3rem;
-    border-radius: 1rem;
-    border: 1px solid rgba(159, 122, 234, 0.2);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-.contact-info {
-    background: rgba(19, 17, 29, 0.8);
     padding: 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(159, 122, 234, 0.1);
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.info-item {
-    margin-bottom: 2rem;
+.contact-form-section {
+    padding: 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
 }
 
-.info-item h3 {
-    color: var(--primary-purple);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-    text-shadow: 0 0 10px rgba(159, 122, 234, 0.3);
-}
-
-.info-item p {
-    color: var(--light-purple);
-    line-height: 1.6;
+.contact-form-section h2 {
+    margin-bottom: 1.5rem;
+    color: #333;
 }
 
 .contact-form {
-    background: rgba(19, 17, 29, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.contact-info-section {
     padding: 2rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(159, 122, 234, 0.1);
 }
 
-.form-group {
+.contact-info-section h2 {
     margin-bottom: 1.5rem;
+    color: #333;
 }
 
-.form-group label {
-    display: block;
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.info-item i {
+    font-size: 1.5rem;
+    color: #007bff;
+    width: 30px;
+    text-align: center;
+}
+
+.info-item h3 {
     margin-bottom: 0.5rem;
-    color: var(--light-purple);
-    font-weight: 500;
+    color: #333;
 }
 
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 0.75rem;
-    background: rgba(31, 26, 46, 0.8);
-    border: 1px solid rgba(159, 122, 234, 0.2);
-    border-radius: 0.5rem;
-    color: var(--white);
-    font-size: 1rem;
+.info-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+.social-links {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-icons a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    color: #007bff;
     transition: all 0.3s ease;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-    outline: none;
-    border-color: var(--primary-purple);
-    box-shadow: 0 0 0 2px rgba(159, 122, 234, 0.15);
+.social-icons a:hover {
+    background: #007bff;
+    color: #fff;
+    transform: translateY(-3px);
 }
 
-.error-message {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.submit-btn {
-    background: var(--primary-purple);
-    color: var(--white);
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 10px rgba(159, 122, 234, 0.2);
-}
-
-.submit-btn:hover {
-    background: var(--secondary-purple);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(159, 122, 234, 0.4);
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
-    .contact-container {
-        grid-template-columns: 1fr;
-        padding: 2rem;
-    }
-    
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .services-content,
     .contact-content {
-        padding: 2rem 1rem;
+        grid-template-columns: 1fr;
     }
-}
 
-.vm-form label{
-    color:black;
-}
+    .contact-container {
+        margin: 1rem auto;
+    }
 
-h1{
-    color:white;
-}
-.contact-info h2{
-    color:white;
-}
-.contact-info p{
-    color:white;
-}
+    .contact-header h1 {
+        font-size: 2rem;
+    }
 
-.contact-form h2{
-    color:white;
+    .info-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .info-item i {
+        margin-bottom: 0.5rem;
+    }
 }
 
 /* Service Management Styles */
@@ -1309,7 +1308,7 @@ h1{
     margin-top: 2.5rem;
 }
 
-.login-btn, .signup-btn {
+.login-btn {
     padding: 1rem 2.5rem;
     border: none;
     border-radius: 0.5rem;
@@ -1322,28 +1321,12 @@ h1{
     min-width: 180px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.login-btn {
     background-color: var(--primary-purple);
     color: var(--white);
-}
-
-.signup-btn {
-    background-color: transparent;
-    color: var(--primary-purple);
-    border: 2px solid var(--primary-purple);
 }
 
 .login-btn:hover {
     background-color: var(--primary-purple-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(159, 122, 234, 0.3);
-}
-
-.signup-btn:hover {
-    background-color: var(--primary-purple);
-    color: var(--white);
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(159, 122, 234, 0.3);
 }
@@ -1358,129 +1341,10 @@ h1{
         margin: 2rem auto 0;
     }
 
-    .login-btn, .signup-btn {
+    .login-btn {
         width: 100%;
         padding: 0.9rem 2rem;
         font-size: 1rem;
-    }
-}
-
-/* Signup Modal */
-.signup-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
-
-.signup-modal.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.signup-form {
-    background-color: var(--dark-bg);
-    padding: 2rem;
-    border-radius: 1rem;
-    width: 90%;
-    max-width: 500px;
-    position: relative;
-    transform: translateY(-20px);
-    transition: transform 0.3s ease;
-}
-
-.signup-modal.active .signup-form {
-    transform: translateY(0);
-}
-
-.signup-form h2 {
-    color: var(--white);
-    margin-bottom: 1.5rem;
-    text-align: center;
-}
-
-.signup-form .form-group {
-    margin-bottom: 1.5rem;
-}
-
-.signup-form label {
-    display: block;
-    color: var(--white);
-    margin-bottom: 0.5rem;
-}
-
-.signup-form input[type="text"],
-.signup-form input[type="email"],
-.signup-form input[type="password"] {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--primary-purple);
-    border-radius: 0.5rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--white);
-    transition: all 0.3s ease;
-}
-
-.signup-form input[type="text"]:focus,
-.signup-form input[type="email"]:focus,
-.signup-form input[type="password"]:focus {
-    outline: none;
-    border-color: var(--primary-purple-light);
-    box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
-}
-
-.signup-form .form-group:last-child {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.signup-form input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    accent-color: var(--primary-purple);
-}
-
-.signup-form .form-footer {
-    text-align: center;
-    margin-top: 1.5rem;
-    color: var(--white);
-}
-
-.signup-form .form-footer a {
-    color: var(--primary-purple);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.signup-form .form-footer a:hover {
-    color: var(--primary-purple-light);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .auth-buttons {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .login-btn, .signup-btn {
-        width: 100%;
-    }
-
-    .signup-form {
-        width: 95%;
-        padding: 1.5rem;
     }
 }
 
