@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-brand">
-            <a href="index.html">Anantha Cloud Services</a>
+            <a href="/">Anantha Cloud Services</a>
         </div>
         <div class="nav-links">
             <a href="/">Home</a>
@@ -28,195 +28,66 @@
     </nav>
 
     <main class="services-container">
-        <section class="service-tiers">
-            <h1>Choose Your Service Tier</h1>
-            <div class="tiers-grid">
-                <div class="tier-card">
-                    <h3>Basic</h3>
-                    <div class="price">₹999<span>/month</span></div>
-                    <ul class="features">
-                        <li><i class="fas fa-check"></i> 2 vCPU Cores</li>
-                        <li><i class="fas fa-check"></i> 4GB RAM</li>
-                        <li><i class="fas fa-check"></i> 50GB Storage</li>
-                        <li><i class="fas fa-check"></i> Basic Support</li>
-                    </ul>
-                    <button class="select-tier" data-tier="basic">Select Plan</button>
-                </div>
-
-                <div class="tier-card featured">
-                    <h3>Professional</h3>
-                    <div class="price">₹1999<span>/month</span></div>
-                    <ul class="features">
-                        <li><i class="fas fa-check"></i> 4 vCPU Cores</li>
-                        <li><i class="fas fa-check"></i> 8GB RAM</li>
-                        <li><i class="fas fa-check"></i> 100GB Storage</li>
-                        <li><i class="fas fa-check"></i> Priority Support</li>
-                    </ul>
-                    <button class="select-tier" data-tier="professional">Select Plan</button>
-                </div>
-
-                <div class="tier-card">
-                    <h3>Enterprise</h3>
-                    <div class="price">₹3999<span>/month</span></div>
-                    <ul class="features">
-                        <li><i class="fas fa-check"></i> 8 vCPU Cores</li>
-                        <li><i class="fas fa-check"></i> 16GB RAM</li>
-                        <li><i class="fas fa-check"></i> 200GB Storage</li>
-                        <li><i class="fas fa-check"></i> 24/7 Support</li>
-                    </ul>
-                    <button class="select-tier" data-tier="enterprise">Select Plan</button>
-                </div>
-            </div>
+        <section class="services-header">
+            <h1>Choose Your Service Tier <span class="beta-badge">BETA</span></h1>
+            <p class="beta-notice">All services are currently free during our beta testing phase</p>
         </section>
 
-        <section class="vm-creation">
-            <h2>Create Your Virtual Machine</h2>
-            <form id="vmCreationForm" class="vm-form">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="vmName">VM Name:</label>
-                        <input type="text" id="vmName" name="vmName" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="vmId">VM ID:</label>
-                        <input type="number" id="vmId" name="vmId" required min="100">
-                    </div>
+        <section class="pricing-tiers">
+            <div class="pricing-tier">
+                <div class="tier-header">
+                    <h2>Free</h2>
+                    <div class="price">For Personal Projects</div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="memory">Memory (MB):</label>
-                        <input type="number" id="memory" name="memory" required min="512" step="512" value="2048">
-                        <div class="resource-meter">
-                            <div class="meter-fill" id="memoryMeter"></div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="cores">CPU Cores:</label>
-                        <input type="number" id="cores" name="cores" required min="1" max="8" value="2">
-                        <div class="resource-meter">
-                            <div class="meter-fill" id="coresMeter"></div>
-                        </div>
-                    </div>
+                <div class="tier-features">
+                    <ul>
+                        <li><i class="fas fa-microchip"></i> 2 CPUs</li>
+                        <li><i class="fas fa-memory"></i> 16GB RAM</li>
+                        <li><i class="fas fa-hdd"></i> 50GB Storage</li>
+                        <li><i class="fas fa-shield-alt"></i> Basic Security</li>
+                        <li><i class="fas fa-headset"></i> Community Support</li>
+                    </ul>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="storage">Storage:</label>
-                        <select id="storage" name="storage" required>
-                            <option value="local-lvm">Local LVM</option>
-                            <option value="local">Local</option>
-                            <option value="nfs">NFS</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="iso">Operating System:</label>
-                        <select id="iso" name="iso" required>
-                            <option value="local:iso/ubuntu-22.04.iso">Ubuntu 22.04</option>
-                            <option value="local:iso/debian-11.iso">Debian 11</option>
-                            <option value="local:iso/centos-8.iso">CentOS 8</option>
-                            <option value="local:iso/windows-2022.iso">Windows Server 2022</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="network">Network Bridge:</label>
-                    <input type="text" id="network" name="network" value="vmbr0" required>
-                </div>
-
-                <div class="payment-section">
-                    <h3>Payment Information</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="upiId">UPI ID:</label>
-                            <input type="text" id="upiId" name="upiId" required 
-                                   pattern="[a-zA-Z0-9\.\-_]{2,256}@[a-zA-Z]{2,64}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="amount">Amount (INR):</label>
-                            <input type="number" id="amount" name="amount" required min="0" step="0.01">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-plus-circle"></i> Create VM
-                </button>
-            </form>
-        </section>
-
-        <section class="vm-management">
-            <h2>Your Virtual Machines</h2>
-            <div class="vm-filters">
-                <input type="text" id="vmSearch" placeholder="Search VMs...">
-                <select id="vmStatusFilter">
-                    <option value="all">All Status</option>
-                    <option value="running">Running</option>
-                    <option value="stopped">Stopped</option>
-                    <option value="error">Error</option>
-                </select>
+                <button class="select-tier-btn">Select Free Plan</button>
             </div>
-            <div class="vm-grid" id="vmGrid">
-                <!-- VMs will be dynamically added here -->
+
+            <div class="pricing-tier featured">
+                <div class="tier-header">
+                    <h2>Basic</h2>
+                    <div class="price">For Small Businesses</div>
+                </div>
+                <div class="tier-features">
+                    <ul>
+                        <li><i class="fas fa-microchip"></i> 6 CPUs</li>
+                        <li><i class="fas fa-memory"></i> 32GB RAM</li>
+                        <li><i class="fas fa-hdd"></i> 100GB Storage</li>
+                        <li><i class="fas fa-shield-alt"></i> Enhanced Security</li>
+                        <li><i class="fas fa-headset"></i> Priority Support</li>
+                    </ul>
+                </div>
+                <button class="select-tier-btn">Select Basic Plan</button>
+            </div>
+
+            <div class="pricing-tier">
+                <div class="tier-header">
+                    <h2>Professional</h2>
+                    <div class="price">For Enterprise Solutions</div>
+                </div>
+                <div class="tier-features">
+                    <ul>
+                        <li><i class="fas fa-microchip"></i> 16 CPUs</li>
+                        <li><i class="fas fa-memory"></i> 70GB RAM</li>
+                        <li><i class="fas fa-hdd"></i> 500GB Storage</li>
+                        <li><i class="fas fa-shield-alt"></i> Advanced Security</li>
+                        <li><i class="fas fa-headset"></i> 24/7 Dedicated Support</li>
+                    </ul>
+                </div>
+                <button class="select-tier-btn">Select Professional Plan</button>
             </div>
         </section>
     </main>
 
     <div id="notificationContainer" class="notification-container"></div>
-
-    <!-- Update Service Modal -->
-    <div id="updateServiceModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeUpdateModal()">&times;</span>
-            <h2>Update Service</h2>
-            <form id="updateServiceForm">
-                <input type="hidden" id="updateServiceId" name="serviceId">
-                <div class="form-group">
-                    <label for="updateServiceName">Service Name</label>
-                    <input type="text" id="updateServiceName" name="serviceName" required>
-                </div>
-                <div class="form-group">
-                    <label for="updateServiceDescription">Description</label>
-                    <textarea id="updateServiceDescription" name="serviceDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="updateServicePrice">Price (₹)</label>
-                    <input type="number" id="updateServicePrice" name="servicePrice" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label for="updateServiceFeatures">Features (comma-separated)</label>
-                    <textarea id="updateServiceFeatures" name="serviceFeatures" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Update Service</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Delete Service Modal -->
-    <div id="deleteServiceModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
-            <h2>Delete Service</h2>
-            <form id="deleteServiceForm">
-                <input type="hidden" id="deleteServiceId" name="deleteServiceId">
-                <div class="form-group">
-                    <label for="deleteUpiId">UPI ID</label>
-                    <input type="text" id="deleteUpiId" name="deleteUpiId" required>
-                </div>
-                <div class="form-group">
-                    <label for="deleteAmount">Amount (₹)</label>
-                    <input type="number" id="deleteAmount" name="deleteAmount" step="0.01" required>
-                </div>
-                <button type="submit" class="submit-btn delete">Delete Service</button>
-            </form>
-        </div>
-    </div>
-
     <script src="/static/script.js"></script>
 </body>
 </html>

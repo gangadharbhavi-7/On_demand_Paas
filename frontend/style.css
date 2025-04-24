@@ -874,8 +874,9 @@ body {
 /* Contact Page Styles */
 .contact-container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin: 80px auto 0;
+    padding: 2rem;
+    color: var(--white);
 }
 
 .contact-header {
@@ -885,34 +886,33 @@ body {
 
 .contact-header h1 {
     font-size: 2.5rem;
-    color: #333;
     margin-bottom: 1rem;
+    color: var(--primary-purple);
 }
 
 .contact-header p {
-    color: #666;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    color: var(--light-purple);
 }
 
 .contact-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
+    background: rgba(31, 26, 46, 0.8);
     padding: 2rem;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    border: 1px solid rgba(159, 122, 234, 0.2);
 }
 
 .contact-form-section {
     padding: 2rem;
-    background: #f8f9fa;
-    border-radius: 8px;
 }
 
 .contact-form-section h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
+    color: var(--primary-purple);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
 }
 
 .contact-form {
@@ -921,13 +921,42 @@ body {
     gap: 1.5rem;
 }
 
+.contact-form .form-group {
+    margin-bottom: 0;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--light-purple);
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    background: rgba(19, 17, 29, 0.8);
+    border: 1px solid rgba(159, 122, 234, 0.2);
+    border-radius: 0.5rem;
+    color: var(--white);
+    font-size: 1rem;
+}
+
+.contact-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
 .contact-info-section {
     padding: 2rem;
+    background: rgba(19, 17, 29, 0.8);
+    border-radius: 0.5rem;
 }
 
 .contact-info-section h2 {
-    margin-bottom: 1.5rem;
-    color: #333;
+    color: var(--primary-purple);
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
 }
 
 .contact-info {
@@ -944,31 +973,34 @@ body {
 
 .info-item i {
     font-size: 1.5rem;
-    color: #007bff;
-    width: 30px;
-    text-align: center;
+    color: var(--primary-purple);
+    margin-top: 0.3rem;
 }
 
 .info-item h3 {
+    color: var(--white);
     margin-bottom: 0.5rem;
-    color: #333;
+    font-size: 1.2rem;
 }
 
 .info-item p {
-    color: #666;
+    color: var(--light-purple);
     line-height: 1.6;
 }
 
 .social-links {
-    margin-top: 2rem;
-    text-align: center;
+    margin-top: 3rem;
+}
+
+.social-links h3 {
+    color: var(--white);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
 }
 
 .social-icons {
     display: flex;
-    justify-content: center;
     gap: 1rem;
-    margin-top: 1rem;
 }
 
 .social-icons a {
@@ -977,29 +1009,37 @@ body {
     justify-content: center;
     width: 40px;
     height: 40px;
+    background: rgba(159, 122, 234, 0.1);
     border-radius: 50%;
-    background: #f8f9fa;
-    color: #007bff;
+    color: var(--primary-purple);
+    font-size: 1.2rem;
     transition: all 0.3s ease;
 }
 
 .social-icons a:hover {
-    background: #007bff;
-    color: #fff;
+    background: var(--primary-purple);
+    color: var(--white);
     transform: translateY(-3px);
 }
 
+/* Responsive Design for Contact Page */
 @media (max-width: 768px) {
     .contact-content {
         grid-template-columns: 1fr;
+        padding: 1rem;
     }
 
-    .contact-container {
-        margin: 1rem auto;
+    .contact-form-section,
+    .contact-info-section {
+        padding: 1.5rem;
     }
 
     .contact-header h1 {
         font-size: 2rem;
+    }
+
+    .contact-header p {
+        font-size: 1rem;
     }
 
     .info-item {
@@ -1377,4 +1417,148 @@ body {
 .user-info button:hover {
     background-color: var(--primary-purple);
     color: var(--white);
+}
+
+.beta-badge {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+    vertical-align: middle;
+}
+
+.beta-notice {
+    color: #7f8c8d;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.services-container {
+    max-width: 1200px;
+    margin: 80px auto 0;
+    padding: 2rem;
+}
+
+.services-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.services-header h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.pricing-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.pricing-tier {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.pricing-tier:hover {
+    transform: translateY(-5px);
+}
+
+.pricing-tier.featured {
+    border: 2px solid #3498db;
+    position: relative;
+}
+
+.pricing-tier.featured::before {
+    content: "Most Popular";
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3498db;
+    color: white;
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.tier-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.tier-header h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.price {
+    font-size: 2rem;
+    color: #3498db;
+    font-weight: bold;
+}
+
+.tier-features {
+    margin: 2rem 0;
+}
+
+.tier-features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tier-features li {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    color: #34495e;
+}
+
+.tier-features i {
+    margin-right: 1rem;
+    color: #3498db;
+    font-size: 1.2rem;
+}
+
+.select-tier-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.select-tier-btn:hover {
+    background: #2980b9;
+}
+
+.pricing-tier.featured .select-tier-btn {
+    background: #2ecc71;
+}
+
+.pricing-tier.featured .select-tier-btn:hover {
+    background: #27ae60;
+}
+
+@media (max-width: 768px) {
+    .pricing-tiers {
+        grid-template-columns: 1fr;
+    }
+    
+    .services-header h1 {
+        font-size: 2rem;
+    }
 }

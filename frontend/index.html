@@ -13,7 +13,7 @@
     <div class="main">
         <nav class="navbar">
             <div class="nav-brand">
-                <a href="index.html">Anantha Cloud Services</a>
+                <a href="/">Anantha Cloud Services</a>
             </div>
             <div class="nav-links">
                 <a href="/">Home</a>
@@ -30,90 +30,72 @@
         </nav>
 
         <main class="content">
-            <h1>Anantha <br>Cloud Services</h1>
-            <p class="tagline">
-                Our cloud services provide seamless scalability, robust security,
-                and high availability, empowering businesses to drive innovation and efficiency.
-            </p>
-            <div class="auth-buttons">
-                <button class="login-btn" onclick="openLoginModal()" aria-label="Open login form">Login</button>
+            <h1>Welcome to Anantha Cloud Services</h1>
+            <p class="tagline">Your trusted partner for cloud computing solutions</p>
+            
+            <div class="form-container">
+                <div class="form">
+                    <h2>Get Started</h2>
+                    <div class="auth-buttons">
+                        <button class="login-btn" onclick="openLoginModal()">Login</button>
+                        <button class="signup-btn" onclick="openSignupModal()">Sign Up</button>
+                    </div>
+                </div>
             </div>
         </main>
 
         <!-- Login Modal -->
-        <div class="login-modal" id="loginModal" role="dialog" aria-labelledby="loginModalTitle" aria-hidden="true">
-            <div class="login-form">
-                <button class="close-modal" onclick="closeLoginModal()" aria-label="Close login form">×</button>
-                <h2 id="loginModalTitle">Welcome Back</h2>
-                <form id="loginForm" novalidate>
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeLoginModal()">&times;</span>
+                <h2>Login</h2>
+                <form id="loginForm">
                     <div class="form-group">
-                        <label for="email">Email Address :</label>
-                        <input type="email" id="email" name="email" required 
-                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                        <div class="error-message" id="emailError"></div>
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password :</label>
-                        <input type="password" id="password" name="password" required 
-                               minlength="8">
-                        <div class="error-message" id="passwordError"></div>
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" name="password" required>
                     </div>
-                    <div class="error-message" id="loginError"></div>
-                    <button type="submit" class="btnn">Login</button>
-                    <p class="form-footer">
-                        Don't have an account? <a href="#" onclick="switchToSignup()" role="button">Sign up</a>
-                    </p>
+                    <button type="submit" class="submit-btn">Login</button>
                 </form>
             </div>
         </div>
 
         <!-- Signup Modal -->
-        <div class="signup-modal" id="signupModal" role="dialog" aria-labelledby="signupModalTitle" aria-hidden="true">
-            <div class="signup-form">
-                <button class="close-modal" onclick="closeSignupModal()" aria-label="Close signup form">×</button>
-                <h2 id="signupModalTitle">Create Account</h2>
-                <form id="signupForm" novalidate>
+        <div id="signupModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeSignupModal()">&times;</span>
+                <h2>Sign Up</h2>
+                <form id="signupForm">
                     <div class="form-group">
-                        <label for="signupName">Full Name :</label>
+                        <label for="signupName">Name</label>
                         <input type="text" id="signupName" name="name" required>
-                        <div class="error-message" id="nameError"></div>
                     </div>
                     <div class="form-group">
-                        <label for="signupEmail">Email Address :</label>
-                        <input type="email" id="signupEmail" name="email" required 
-                               pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                        <div class="error-message" id="signupEmailError"></div>
+                        <label for="signupEmail">Email</label>
+                        <input type="email" id="signupEmail" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="signupPassword">Password :</label>
-                        <input type="password" id="signupPassword" name="password" required 
-                               minlength="8">
-                        <div class="error-message" id="signupPasswordError"></div>
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" name="password" required>
                     </div>
                     <div class="form-group">
-                        <label for="confirmPassword">Confirm Password :</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required>
-                        <div class="error-message" id="confirmPasswordError"></div>
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                        <input type="password" id="signupConfirmPassword" name="confirmPassword" required>
                     </div>
                     <div class="form-group">
-                        <label for="company">Company (Optional) :</label>
-                        <input type="text" id="company" name="company">
+                        <label for="signupCompany">Company (Optional)</label>
+                        <input type="text" id="signupCompany" name="company">
                     </div>
-                    <div class="form-group">
-                        <input type="checkbox" id="terms" name="terms" required>
-                        <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-                        <div class="error-message" id="termsError"></div>
-                    </div>
-                    <div class="error-message" id="signupError"></div>
-                    <button type="submit" class="btnn">Create Account</button>
-                    <p class="form-footer">
-                        Already have an account? <a href="#" onclick="switchToLogin()" role="button">Login</a>
-                    </p>
+                    <button type="submit" class="submit-btn">Sign Up</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <div id="notificationContainer" class="notification-container"></div>
     <script src="/static/script.js"></script>
 </body>
 </html>

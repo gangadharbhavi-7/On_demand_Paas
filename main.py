@@ -1,5 +1,5 @@
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, HTTPException, Request, Depends
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -17,7 +17,7 @@ ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex((HOST, port)) == 0
+        return s.connect_ex(('localhost', port)) == 0
 
 def find_available_port(start_port):
     port = start_port
@@ -81,34 +81,25 @@ class ContactForm(BaseModel):
     subject: str
     message: str
 
+# Get the absolute path to the frontend directory
+frontend_dir = Path(__file__).parent / "frontend"
+
 # Routes
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
-    try:
-        return templates.TemplateResponse("index.html", {"request": request})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error loading index page: {str(e)}")
+    return FileResponse(frontend_dir / "index.html")
 
 @app.get("/services", response_class=HTMLResponse)
 async def read_services(request: Request):
-    try:
-        return templates.TemplateResponse("services.html", {"request": request})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error loading services page: {str(e)}")
+    return FileResponse(frontend_dir / "services.html")
 
 @app.get("/contact", response_class=HTMLResponse)
 async def read_contact(request: Request):
-    try:
-        return templates.TemplateResponse("contact.html", {"request": request})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error loading contact page: {str(e)}")
+    return FileResponse(frontend_dir / "contact.html")
 
 @app.get("/about", response_class=HTMLResponse)
 async def read_about(request: Request):
-    try:
-        return templates.TemplateResponse("about.html", {"request": request})
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error loading about page: {str(e)}")
+    return FileResponse(frontend_dir / "about.html")
 
 @app.post("/api/create-vm")
 async def create_vm(vm_config: VMConfig):
@@ -251,15 +242,15 @@ if __name__ == "__main__":
     import uvicorn
     try:
         # Check if the port is available
-        if is_port_in_use(PORT):
-            print(f"Port {PORT} is in use. Trying to find an available port...")
-            PORT = find_available_port(PORT)
+        if is_port_in_use(8001):
+            print(f"Port 8001 is in use. Trying to find an available port...")
+            PORT = find_available_port(8001)
             print(f"Found available port: {PORT}")
+        else:
+            PORT = 8001
 
-        print(f"Starting server in {ENVIRONMENT} mode")
-        print(f"Debug mode: {DEBUG}")
-        print(f"Server will run on {HOST}:{PORT}")
-        uvicorn.run(app, host=HOST, port=PORT)
+        print(f"Server will run on 0.0.0.0:{PORT}")
+        uvicorn.run(app, host="0.0.0.0", port=PORT)
     except Exception as e:
         print(f"Error starting server: {str(e)}")
         print("Please check if another process is using the port or if you have the necessary permissions.")
