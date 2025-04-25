@@ -18,10 +18,13 @@
             <a href="/about">About</a>
             <a href="/services">Services</a>
             <a href="/contact">Contact</a>
-            <div id="userMenu" style="display: none;">
-                <div class="user-info">
-                    <span>Loading...</span>
-                    <button onclick="logout()">Logout</button>
+            <div id="userMenu" class="user-menu">
+                <i class="fas fa-user-circle account-icon"></i>
+                <div class="user-dropdown">
+                    <div class="user-info">
+                        <span id="userName">Sign In</span>
+                    </div>
+                    <button id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
                 </div>
             </div>
         </div>
@@ -32,6 +35,27 @@
             <h1>Choose Your Service Tier <span class="beta-badge">BETA</span></h1>
             <p class="beta-notice">All services are currently free during our beta testing phase</p>
         </section>
+
+        <!-- OS Selection Form (shown when user is logged in) -->
+        <div id="osSelectionForm" class="os-form" style="display: none;">
+            <h2>Configure Your Environment</h2>
+            <form id="environmentForm">
+                <div class="form-group">
+                    <label for="userName">Your Name</label>
+                    <input type="text" id="userName" name="userName" required>
+                </div>
+                <div class="form-group">
+                    <label for="operatingSystem">Select Operating System</label>
+                    <select id="operatingSystem" name="operatingSystem" required>
+                        <option value="">Choose an OS</option>
+                        <option value="linux">Linux</option>
+                        <option value="windows">Windows</option>
+                        <option value="macos">MacOS</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Confirm Selection</button>
+            </form>
+        </div>
 
         <section class="pricing-tiers">
             <div class="pricing-tier">
@@ -88,6 +112,71 @@
     </main>
 
     <div id="notificationContainer" class="notification-container"></div>
-    <script src="/static/script.js"></script>
+    <script src="/static/auth.js"></script>
+    <script>
+        // Function to handle plan selection
+        function handlePlanSelection(planType) {
+            if (!auth.isAuthenticated()) {
+                // Redirect to home page with a query parameter to open login modal
+                window.location.href = '/?action=login&redirect=services&plan=' + encodeURIComponent(planType);
+                return;
+            }
+            
+            // If authenticated, show OS selection form
+            document.getElementById('osSelectionForm').style.display = 'block';
+            
+            // Store selected plan
+            sessionStorage.setItem('selectedPlan', planType);
+        }
+
+        // Handle environment form submission
+        document.getElementById('environmentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                userName: document.getElementById('userName').value,
+                operatingSystem: document.getElementById('operatingSystem').value,
+                selectedPlan: sessionStorage.getItem('selectedPlan')
+            };
+
+            try {
+                const response = await fetch('/api/environment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showNotification('Environment configured successfully!', 'success');
+                    // Clear stored plan
+                    sessionStorage.removeItem('selectedPlan');
+                } else {
+                    showNotification('Error configuring environment', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error configuring environment', 'error');
+            }
+        });
+
+        // Initialize authentication and add event listeners
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize auth state
+            await auth.initAuth();
+            
+            // Add click event listeners to plan buttons
+            const planButtons = document.querySelectorAll('.select-tier-btn');
+            planButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const planType = this.textContent.replace('Select ', '').replace(' Plan', '').toLowerCase();
+                    handlePlanSelection(planType);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

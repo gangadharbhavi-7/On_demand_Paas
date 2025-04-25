@@ -20,10 +20,13 @@
                 <a href="/about">About</a>
                 <a href="/services">Services</a>
                 <a href="/contact">Contact</a>
-                <div id="userMenu" style="display: none;">
-                    <div class="user-info">
-                        <span>Loading...</span>
-                        <button onclick="logout()">Logout</button>
+                <div id="userMenu" class="user-menu">
+                    <i class="fas fa-user-circle account-icon"></i>
+                    <div class="user-dropdown">
+                        <div class="user-info">
+                            <span id="userName">Sign In</span>
+                        </div>
+                        <button id="logoutBtn" onclick="logout()" style="display: none;">Logout</button>
                     </div>
                 </div>
             </div>
@@ -33,14 +36,9 @@
             <h1>Welcome to Anantha Cloud Services</h1>
             <p class="tagline">Your trusted partner for cloud computing solutions</p>
             
-            <div class="form-container">
-                <div class="form">
-                    <h2>Get Started</h2>
-                    <div class="auth-buttons">
-                        <button class="login-btn" onclick="openLoginModal()">Login</button>
-                        <button class="signup-btn" onclick="openSignupModal()">Sign Up</button>
-                    </div>
-                </div>
+            <div class="auth-section">
+                <h2 class="get-started-text">Get Started</h2>
+                <button class="login-btn" onclick="openLoginModal()">Login</button>
             </div>
         </main>
 
@@ -59,6 +57,9 @@
                         <input type="password" id="loginPassword" name="password" required>
                     </div>
                     <button type="submit" class="submit-btn">Login</button>
+                    <div class="signup-prompt">
+                        <p>New user? <a href="#" onclick="switchToSignup()">Sign up here</a></p>
+                    </div>
                 </form>
             </div>
         </div>
@@ -90,12 +91,226 @@
                         <input type="text" id="signupCompany" name="company">
                     </div>
                     <button type="submit" class="submit-btn">Sign Up</button>
+                    <div class="login-prompt">
+                        <p>Already have an account? <a href="#" onclick="switchToLogin()">Login here</a></p>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 
     <div id="notificationContainer" class="notification-container"></div>
-    <script src="/static/script.js"></script>
+    <script src="/static/auth.js"></script>
+    <script>
+        // Function to parse URL parameters
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                action: params.get('action'),
+                redirect: params.get('redirect'),
+                plan: params.get('plan')
+            };
+        }
+
+        // Function to handle login form submission
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    // Save auth data
+                    auth.saveAuthData(data.token, {
+                        name: data.name,
+                        email: data.email
+                    });
+                    
+                    // Update UI
+                    auth.updateAuthUI();
+                    closeLoginModal();
+                    
+                    // Show success message
+                    showNotification('Login successful!', 'success');
+                    
+                    // Handle redirect if coming from services page
+                    handleSuccessfulLogin();
+                } else {
+                    showNotification(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Login failed', 'error');
+            }
+        });
+
+        // Function to handle signup form submission
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const company = document.getElementById('signupCompany').value.trim();
+
+            // Validate password
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters long', 'error');
+                return;
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match', 'error');
+                return;
+            }
+
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showNotification('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // Validate name
+            if (name.length < 2) {
+                showNotification('Name must be at least 2 characters long', 'error');
+                return;
+            }
+
+            const formData = {
+                name,
+                email,
+                password,
+                company: company || null
+            };
+
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    // Save auth data
+                    auth.saveAuthData(data.token, {
+                        name: data.name,
+                        email: data.email
+                    });
+                    
+                    // Update UI
+                    auth.updateAuthUI();
+                    closeSignupModal();
+                    
+                    // Show success message
+                    showNotification('Signup successful!', 'success');
+                    
+                    // Handle redirect if coming from services page
+                    handleSuccessfulLogin();
+                } else {
+                    showNotification(data.detail || 'Signup failed', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Signup failed. Please try again.', 'error');
+            }
+        });
+
+        // Function to handle logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            updateAuthStatus();
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // Function to update authentication status in UI
+        function updateAuthStatus() {
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (isAuthenticated()) {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                userName.textContent = user.email || 'User';
+                logoutBtn.style.display = 'block';
+            } else {
+                userName.textContent = 'Sign In';
+                logoutBtn.style.display = 'none';
+            }
+        }
+
+        // Function to check if user is authenticated
+        function isAuthenticated() {
+            return localStorage.getItem('token') !== null;
+        }
+
+        // Initialize authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            auth.initAuth();
+            
+            const params = getUrlParams();
+            if (params.action === 'login') {
+                openLoginModal();
+                sessionStorage.setItem('redirectAfterLogin', JSON.stringify({
+                    page: params.redirect,
+                    plan: params.plan
+                }));
+            }
+        });
+
+        // Function to switch between login and signup forms
+        function switchToSignup() {
+            closeLoginModal();
+            openSignupModal();
+        }
+
+        function switchToLogin() {
+            closeSignupModal();
+            openLoginModal();
+        }
+
+        // Function to handle successful login
+        function handleSuccessfulLogin() {
+            const redirectInfo = JSON.parse(sessionStorage.getItem('redirectAfterLogin') || '{}');
+            if (redirectInfo.page === 'services') {
+                window.location.href = '/services';
+                sessionStorage.removeItem('redirectAfterLogin');
+            }
+        }
+
+        // Modal control functions
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function openSignupModal() {
+            document.getElementById('signupModal').style.display = 'block';
+        }
+
+        function closeSignupModal() {
+            document.getElementById('signupModal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

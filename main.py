@@ -8,12 +8,17 @@ import os
 import socket
 from pathlib import Path
 from fastapi import status
+import jwt
+from datetime import datetime, timedelta
+from typing import Optional
+import database
 
 # Load environment variables
 PORT = int(os.getenv("PORT", "8001"))
 HOST = os.getenv("HOST", "0.0.0.0")
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-here")  # Change this in production
 
 def is_port_in_use(port):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -80,6 +85,31 @@ class ContactForm(BaseModel):
     email: EmailStr
     subject: str
     message: str
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserSignup(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    company: Optional[str] = None
+
+class User(BaseModel):
+    name: str
+    email: EmailStr
+    company: Optional[str] = None
+
+# In-memory user storage (replace with database in production)
+users_db = {}
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(days=7)  # Token expires in 7 days
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
+    return encoded_jwt
 
 # Get the absolute path to the frontend directory
 frontend_dir = Path(__file__).parent / "frontend"
@@ -237,6 +267,98 @@ async def submit_contact_form(contact_form: ContactForm):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to process contact form submission"
         )
+
+@app.post("/api/login")
+async def login(user_data: UserLogin):
+    # Verify user credentials
+    user = database.verify_user(user_data.email, user_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid email or password"
+        )
+    
+    # Create access token
+    access_token = create_access_token(
+        data={"sub": user["email"]}
+    )
+    
+    # Create session in database
+    expires_at = datetime.utcnow() + timedelta(days=7)
+    database.create_session(user["id"], access_token, expires_at)
+    
+    return {
+        "success": True,
+        "token": access_token,
+        "name": user["name"],
+        "email": user["email"]
+    }
+
+@app.post("/api/signup")
+async def signup(user_data: UserSignup):
+    try:
+        # Validate password
+        if len(user_data.password) < 6:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password must be at least 6 characters long"
+            )
+        
+        # Create user in database
+        try:
+            user_id = database.create_user(
+                name=user_data.name,
+                email=user_data.email,
+                password=user_data.password,
+                company=user_data.company
+            )
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(e)
+            )
+        
+        # Create access token
+        access_token = create_access_token(
+            data={"sub": user_data.email}
+        )
+        
+        # Create session in database
+        expires_at = datetime.utcnow() + timedelta(days=7)
+        database.create_session(user_id, access_token, expires_at)
+        
+        return {
+            "success": True,
+            "token": access_token,
+            "name": user_data.name,
+            "email": user_data.email
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"Error during signup: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred during signup"
+        )
+
+@app.post("/api/logout")
+async def logout(token: str):
+    database.delete_session(token)
+    return {"success": True}
+
+@app.get("/api/verify-session")
+async def verify_session(token: str):
+    user = database.get_user_by_token(token)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired session"
+        )
+    return {
+        "success": True,
+        "user": user
+    }
 
 if __name__ == "__main__":
     import uvicorn
